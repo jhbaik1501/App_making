@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/widget28"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:orientation="vertical" xmlns:android="http://schemas.android.com/apk/res/android">
+        <TextView android:id="@+id/label1" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="받는사람 전화번호"
+            android:textSize="12sp">
+        </TextView>
+        <EditText android:id="@+id/phone" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:textSize="18sp"
+            android:phoneNumber="true">
+        </EditText>
+        <TextView android:id="@+id/label2" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="메시지"
+            android:textSize="12sp">
+        </TextView>
+        <EditText android:id="@+id/message" android:layout_width="fill_parent"
+            android:layout_height="150px" android:gravity="top">
+        </EditText>
+        <Button android:id="@+id/button" android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:text="전송">
+        </Button>
+    </LinearLayout>
+

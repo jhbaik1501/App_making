@@ -4,40 +4,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/picture0"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:background="@drawable/renoir04"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00ff0000"
+            android:foreground="@android:drawable/btn_dialog"
+            app:backgroundTint="#00FFFFFF" />
+
+        <TextView
+            android:id="@+id/coin_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:text="TextView"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00ff0000"
+            android:foreground="@android:drawable/ic_menu_gallery" />
+    </LinearLayout>
+
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:alignmentMode="alignMargins"
+        android:columnCount="2"
+        android:orientation="horizontal"
+
+        android:rowCount="4">
+
+        <Button
+            android:id="@+id/call_button"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_gravity="center"
+            android:layout_margin="45dp"
+            android:background="#FFFFFF"
+            android:foreground="@android:drawable/ic_menu_call"
+            app:iconGravity="textEnd" />
+
+        <Button
+
+            android:id="@+id/SMS_button"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_gravity="center"
+            android:layout_margin="45dp"
+            android:foreground="@android:drawable/sym_action_email"
+            app:iconGravity="textEnd" />
+
+
+        <Button
+            android:id="@+id/Game_button"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_margin="45dp"
+            android:foreground="@android:drawable/ic_menu_myplaces"
+            app:iconGravity="textEnd" />
+
+        <Button
+            android:id="@+id/Study_button"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_margin="45dp"
+            android:foreground="@android:drawable/ic_menu_recent_history"
+            app:iconGravity="textEnd" />
+
+
+    </GridLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/Month_"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
+
         <TextClock
             android:id="@+id/textClock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#B47E7E7E"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/button"
             android:format12Hour="yy년 MM월 dd일 \n hh:mm:ss a"
             android:gravity="center"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
+            android:text="."
             android:textColor="#80CC28"
             android:textSize="50dp"
             android:textStyle="bold" />

@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.DIAL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+
 
 
     <application
@@ -16,10 +21,44 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <receiver
+            android:name="com.example.app_making.CallCheckReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="CallCheckReceiver"
+            android:process=".cCallCheckReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+
+        <receiver android:name=".SmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            </intent-filter>
+        </receiver>
+
+
+        <receiver
+            android:name=".TimeReset"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+
+        <activity android:name=".CallActivity" android:label="call 액티비디" />
+        <activity android:name=".SMSActivity" android:label="SMS 액티비디" />
+        <activity android:name=".StudyActivity" android:label="Study 액티비디" />
     </application>
 
 </manifest>
