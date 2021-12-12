@@ -3,6 +3,8 @@ package com.example.app_making;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,32 +16,41 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class CallActivity extends Activity {
 
-    Button retButton;
+    TextView callList;
     Button CallBtn;
     EditText phone_number;
+    int isCall = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_call);
 
-        retButton = findViewById(R.id.retbutton);
+        callList = findViewById(R.id.call_list);
         CallBtn = findViewById(R.id.CallBtn);
         phone_number = findViewById(R.id.Phone_number);
-        retButton.setOnClickListener(new View.OnClickListener() {
+        callList.setText(readCall());
+    /*    retButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
 
         CallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,14 +60,17 @@ public class CallActivity extends Activity {
 
                 if(phone_number.getText().length() == 11){
 
-
+                    isCall = 1;
                     Editable editText = phone_number.getText();
                     editText.insert(3, "-");
                     editText.insert(8, "-");
                     Toast.makeText(getApplicationContext(), "phone_number=" + editText, Toast.LENGTH_SHORT).show();
 
                     String tel = "tel:" + editText;
+                    saveCall(tel);
+                    callList.setText(readCall());
                     sendCall(tel);
+
 
                 }
                 else {
@@ -250,5 +264,62 @@ public class CallActivity extends Activity {
             }
 
         }
+    }
+
+
+    public void saveCall(String str){ // str은 내용
+        String filename;
+        try {
+            str += "\n" + readCall();
+            filename = "Call.txt";
+            FileOutputStream outfs = getApplication().openFileOutput(filename, Context.MODE_PRIVATE);
+            outfs.write(str.getBytes());
+            outfs.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    String readCall() {
+        String filename = "Call.txt";
+        String coin=null;
+        FileInputStream infs;
+        try {
+            infs= getApplication().openFileInput(filename);
+            byte txt[]=new byte[500];
+            infs.read(txt);
+            infs.close();
+            coin=(new String(txt)).trim();
+
+        } catch (FileNotFoundException e) {
+            return "";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return coin;
+    }
+
+    @Override
+    protected void onUserLeaveHint() { //홈 키 혹은 작업탭 키
+        super.onUserLeaveHint();
+        if (isCall == 0){
+            restart(this);
+        }
+        else {
+            isCall =1;
+        }
+
+    }
+
+    private void restart(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        context.startActivity(mainIntent);
+        Runtime.getRuntime().exit(0);
+        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
     }
 }

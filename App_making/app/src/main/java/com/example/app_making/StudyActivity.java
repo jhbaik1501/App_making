@@ -3,9 +3,11 @@ package com.example.app_making;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
@@ -142,7 +144,7 @@ public class StudyActivity extends Activity {
             int i =0;
             if (gettime != null) {
                 String[] HMS = gettime.split(":");
-                int time = Integer.parseInt(HMS[0]) * 3600  + Integer.parseInt(HMS[1]) * 60  + Integer.parseInt(HMS[2]) * 10;
+                int time = Integer.parseInt(HMS[0]) * 3600  + Integer.parseInt(HMS[1]) * 60  + Integer.parseInt(HMS[2]);
                 i += time;
             }
 
@@ -294,6 +296,9 @@ public class StudyActivity extends Activity {
         if(Integer.parseInt(day_) < 10){
             day = String.valueOf(day_.charAt(1));
         }
+        else {
+            day = day_;
+        }
         Log.d("TAG", "today: " +  year + "_" + month + "_" + day + ".txt" + "***********");
         return year + "_" + month + "_" + day + ".txt";
     }
@@ -373,6 +378,26 @@ public class StudyActivity extends Activity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(mReceiver);
+    }
+
+
+    @Override
+    protected void onUserLeaveHint() { //홈 키 혹은 작업탭 키
+        super.onUserLeaveHint();
+        String str = mRecordTextView.getText() + mTimeTextView.getText().toString() + "\n"; //시간량 저장
+        saveTime(str);
+
+        restart(this);
+    }
+
+    private void restart(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        context.startActivity(mainIntent);
+        Runtime.getRuntime().exit(0);
+        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
     }
 }
 

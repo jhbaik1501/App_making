@@ -25,9 +25,12 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
-
-
+import java.util.ArrayList;
 
 
 public class CallCheckReceiver extends BroadcastReceiver {
@@ -41,6 +44,11 @@ public class CallCheckReceiver extends BroadcastReceiver {
         telephony.listen(new PhoneStateListener(){
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
+                super.onCallStateChanged(state, incomingNumber);
+
+
+
+
                 String mState = String.valueOf(state);
                 String contents;
 
@@ -69,6 +77,7 @@ public class CallCheckReceiver extends BroadcastReceiver {
             }
         }, PhoneStateListener.LISTEN_CALL_STATE);
     }
+
 
 
 

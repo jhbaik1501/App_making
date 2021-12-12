@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,16 +15,26 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class SMSActivity extends Activity {
 
     Button btnSendSMS;
     EditText txtPhoneNo;
     EditText txtMessage;
+    RecyclerView recyclerView;
+    CustomerAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,21 +44,40 @@ public class SMSActivity extends Activity {
         txtPhoneNo = (EditText) findViewById(R.id.phone);
         txtMessage = (EditText) findViewById(R.id.message);
 
+        recyclerView = findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
-                btnSendSMS.setOnClickListener(new View.OnClickListener()
-                {
-                    public void onClick(View v)
-                    {
-                        String phoneNo = txtPhoneNo.getText().toString();
-                        String message = txtMessage.getText().toString();
-                        if (phoneNo.length()>0 && message.length()>0)
-                            sendSMS2(phoneNo, message);
-                        else
-                            Toast.makeText(getBaseContext(),
-                                    "Please enter both phone number and message.",
-                                    Toast.LENGTH_SHORT).show();
-                    }
-                });
+        adapter = new CustomerAdapter();
+
+        String[] readSMS = readSMS();
+
+
+        for (int i =1; i < readSMS.length ; i+=2) {
+
+            adapter.addItem(new Customer(readSMS[i], readSMS[i + 1], R.drawable.customer));
+        } //추가 하기 메일 전화번호하고 메일 내용
+
+
+        recyclerView.setAdapter(adapter);
+
+
+
+        btnSendSMS.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                String phoneNo = txtPhoneNo.getText().toString();
+                String message = txtMessage.getText().toString();
+                if (phoneNo.length()>0 && message.length()>0)
+                    sendSMS2(phoneNo, message);
+                else
+                    Toast.makeText(getBaseContext(),
+                            "Please enter both phone number and message.",
+                            Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     // SMS를 전송하는 과정을 모니터링하고 싶다면
@@ -189,6 +219,51 @@ public class SMSActivity extends Activity {
         }
 
     }
+
+
+    String[] readSMS() {
+        String filename = "SMSList.txt";
+        String[] k = new String[3];
+        k[0] = "";
+        k[1] = "아무 내용이 없습니다.";
+        k[2] = "";
+        String A;
+        FileInputStream infs;
+        try {
+            infs= openFileInput(filename);
+            byte txt[] = new byte[500];
+            infs.read(txt);
+            infs.close();
+            A =(new String(txt)).trim();
+            String[] SMS = A.split("<!#!");
+            return SMS;
+
+        } catch (FileNotFoundException e) {
+            Log.d("SMS정보", "SMS정보 없음!");
+            return k;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return k;
+    }
+
+    @Override
+    protected void onUserLeaveHint() { //홈 키 혹은 작업탭 키
+        super.onUserLeaveHint();
+        restart(this);
+    }
+
+    private void restart(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        context.startActivity(mainIntent);
+        Runtime.getRuntime().exit(0);
+        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
+    }
+
+
 
 }
 
