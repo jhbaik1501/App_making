@@ -56,6 +56,11 @@ public class StudyActivity extends Activity {
         mRecordBtn = (Button) findViewById(R.id.btn_record);
         mPauseBtn = (Button) findViewById(R.id.btn_pause);
         mTimeTextView = (TextView) findViewById(R.id.timeView);
+
+        //Toast.makeText(getApplicationContext(), "HI" + readTimeINIT(today()), Toast.LENGTH_LONG).show();
+        mTimeTextView.setText(readTimeINIT(today()));
+
+
         mRecordTextView = (TextView) findViewById(R.id.recordView);
         btnWrite = findViewById(R.id.btnRead);
         edtDiary = findViewById(R.id.edtDiary);
@@ -88,6 +93,7 @@ public class StudyActivity extends Activity {
                 saveTime(str);
                 INDEX = 1;
                 timeThread.interrupt();
+
 
 
 
@@ -144,7 +150,7 @@ public class StudyActivity extends Activity {
             int i =0;
             if (gettime != null) {
                 String[] HMS = gettime.split(":");
-                int time = Integer.parseInt(HMS[0]) * 3600  + Integer.parseInt(HMS[1]) * 60  + Integer.parseInt(HMS[2]);
+                int time = (Integer.parseInt(HMS[0]))* 3600  + Integer.parseInt(HMS[1]) * 60  + Integer.parseInt(HMS[2]);
                 i += time;
             }
 
@@ -179,9 +185,13 @@ public class StudyActivity extends Activity {
                                     mStartBtn.setVisibility(View.VISIBLE);
                                     mPauseBtn.setVisibility(View.GONE);
                                     mRecordTextView.setText("");
+                                    mTimeTextView.setText("");
+                                    mTimeTextView.setText("00:00:00");
                                 } //코인량도 증가시켜야 한다!
-                                mTimeTextView.setText("");
-                                mTimeTextView.setText("00:00:00");
+                                else {
+                                    mTimeTextView.setText(readTime(today()));
+                                }
+
 
 
 
@@ -264,6 +274,7 @@ public class StudyActivity extends Activity {
             e.printStackTrace();
         }
     }
+    
     String readTime_yesterday() {
         String filename = yesterday();
         String diaryStr=null;
@@ -366,6 +377,24 @@ public class StudyActivity extends Activity {
         return diaryStr;
     }
 
+    String readTimeINIT(String filename) {
+        String diaryStr=null;
+        FileInputStream infs;
+        try {
+            infs= openFileInput(filename);
+            byte txt[]=new byte[500];
+            infs.read(txt);
+            infs.close();
+            diaryStr=(new String(txt)).trim();
+            return diaryStr;
+        } catch (FileNotFoundException e) {
+            return "00:00:00";
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return diaryStr;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -384,7 +413,7 @@ public class StudyActivity extends Activity {
     @Override
     protected void onUserLeaveHint() { //홈 키 혹은 작업탭 키
         super.onUserLeaveHint();
-        String str = mRecordTextView.getText() + mTimeTextView.getText().toString() + "\n"; //시간량 저장
+        String str = mTimeTextView.getText().toString() + "\n"; //시간량 저장
         saveTime(str);
 
         restart(this);

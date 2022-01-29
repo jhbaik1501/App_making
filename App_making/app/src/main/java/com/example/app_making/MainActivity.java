@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         if(intent != null){
             contents = intent.getStringExtra("contents");
 
-            print("받은 컨텐트의 값은 바로바로 contents = "+ contents);
+            //print("받은 컨텐트의 값은 바로바로 contents = "+ contents);
         }
     }
 
@@ -161,19 +161,19 @@ public class MainActivity extends AppCompatActivity {
             case R.id.SMS_button:
                 SharedPreferenceUtil.putSharedPreference(getApplicationContext(), "Pause_INDEX", "Act_CHANGE");
                 Intent intent_SMS = new Intent(getApplicationContext(), SMSActivity.class);
-                print("SMS엑티비티");
+                //print("SMS엑티비티");
                 startActivity(intent_SMS);
                 break;
             case R.id.Study_button:
                 SharedPreferenceUtil.putSharedPreference(getApplicationContext(), "Pause_INDEX", "Act_CHANGE");
                 Intent intent_Study = new Intent(getApplicationContext(), StudyActivity.class);
-                print("Study엑티비티");
+                //print("Study엑티비티");
                 startActivity(intent_Study);
                 break;
             case R.id.Background_button:
                 SharedPreferenceUtil.putSharedPreference(getApplicationContext(), "Pause_INDEX", "Act_CHANGE");
                 Intent intent_Background = new Intent(getApplicationContext(), BackgroundActivity.class);
-                print("Background 선택");
+                //print("Background 선택");
                 startActivity(intent_Background);
                 break;
             case R.id.ExitButton:
@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 //restart(this);
                 return false;
             case KeyEvent.KEYCODE_MENU:
-                print("M");
+                //print("M");
                 log("MENU");
                 return false;
         }
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         //unregisterReceiver(mReceiver);
 
         String Pause_INDEX = "";
-        print("pause");
+        //print("pause");
 //        Intent i = getIntent();
 //        String title = i.getStringExtra("call");
 //        print("Title " + title);
@@ -287,20 +287,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Pause_INDEX = SharedPreferenceUtil.getSharedPreference(this, "Pause_INDEX");
-        print("String A = " + Pause_INDEX);
+        //print("String A = " + Pause_INDEX);
         Log.d("A============", Pause_INDEX + "\n\n\n\n");
 
         if (Pause_INDEX != null) {
             if (Pause_INDEX.equals("OFFHOOK")) {
-                print("통화중");
+                //print("통화중");
                 SharedPreferenceUtil.putSharedPreference(getApplicationContext(), "Pause_INDEX", "");
             }
             else if(Pause_INDEX.equals("Act_CHANGE")){
-                print("엑티비티 변화");
+                // print("엑티비티 변화");
                 SharedPreferenceUtil.putSharedPreference(getApplicationContext(), "Pause_INDEX", "");
             }
             else {
-                print("pause");
+                //print("pause");
                 /*try {
                     Thread.sleep(1000);
 
@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        print("Stop");
+        //print("Stop");
         super.onStop();
         //restart(this);
     }
@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
         String[] permissions = {Manifest.permission.SEND_SMS};
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
         if(permissionCheck == PackageManager.PERMISSION_DENIED){
-            print("권한 2");
+            print("권한 3");
             ActivityCompat.requestPermissions(this, permissions, 1);
         }
     }
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         String[] permissions = {Manifest.permission.READ_PHONE_STATE};
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
         if(permissionCheck == PackageManager.PERMISSION_DENIED){
-            print("권한 2");
+            print("권한 4");
             ActivityCompat.requestPermissions(this, permissions, 1);
         }
     }
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
         String[] permissions = {Manifest.permission.CALL_PHONE};
         int permissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE);
         if(permissionCheck == PackageManager.PERMISSION_DENIED){
-            print("권한 2");
+            print("권한 5");
             ActivityCompat.requestPermissions(this, permissions, 1);
         }
     }

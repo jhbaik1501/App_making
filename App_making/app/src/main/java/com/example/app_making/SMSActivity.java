@@ -72,9 +72,7 @@ public class SMSActivity extends Activity {
                 if (phoneNo.length()>0 && message.length()>0)
                     sendSMS2(phoneNo, message);
                 else
-                    Toast.makeText(getBaseContext(),
-                            "Please enter both phone number and message.",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), "Please enter both phone number and message.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -205,7 +203,7 @@ public class SMSActivity extends Activity {
             }
             // CALL_PHONE의 권한이 있을 때
             else {
-                Toast.makeText(getApplicationContext(), "ㅎㅇㅋ1", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "ㅎㅇㅋ1", Toast.LENGTH_SHORT).show();
                 // 즉시 실행
                 __sendSMS(Phone_number, message);
 
@@ -214,7 +212,7 @@ public class SMSActivity extends Activity {
         // 마시멜로우 미만의 버전일 때
         else {
             // 즉시 실행
-            Toast.makeText(getApplicationContext(), "ㅎㅇㅋ2", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "ㅎㅇㅋ2", Toast.LENGTH_SHORT).show();
             __sendSMS(Phone_number, message);
         }
 

@@ -32,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver {
                 contents += msgs[i].getMessageBody().toString();
 
             }
-            Toast.makeText(context, "Num" + PhoneNumber+ " contents" + contents, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "Num" + PhoneNumber+ " contents" + contents, Toast.LENGTH_SHORT).show();
 
             //initSMS(context);
             saveSMS(PhoneNumber, contents, context);
@@ -72,7 +72,7 @@ public class SmsReceiver extends BroadcastReceiver {
             else{
                 save = a;
             }
-            Toast.makeText(context, "\n\n\n ======" + save +"\n\n\n", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "\n\n\n ======" + save +"\n\n\n", Toast.LENGTH_SHORT).show();
 
             filename = "SMSList.txt";
 

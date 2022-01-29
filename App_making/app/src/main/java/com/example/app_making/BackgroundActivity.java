@@ -35,6 +35,10 @@ public class BackgroundActivity extends Activity {
         textView = findViewById(R.id.coin_textView);
         recyclerView = findViewById(R.id.recyclerView);
 
+
+        if(readCoin().equals("0"))
+            saveCoin("0");
+
         int coin_count= Integer.parseInt(readCoin()); //코인의 수
 
         textView.setText("코인의 수 : " + coin_count);
@@ -113,7 +117,7 @@ public class BackgroundActivity extends Activity {
             FileOutputStream outfs = getApplicationContext().openFileOutput(filename, Context.MODE_PRIVATE);
             outfs.write(picture.getBytes());
             outfs.close();
-            Toast.makeText(getApplicationContext(),filename+"이 저장됨",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),filename+"이 저장됨",Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -131,7 +135,7 @@ public class BackgroundActivity extends Activity {
             FileOutputStream outfs = getApplicationContext().openFileOutput(filename, Context.MODE_PRIVATE);
             outfs.write(str.getBytes());
             outfs.close();
-            Toast.makeText(getApplicationContext(),filename+"이 저장됨",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),filename+"이 저장됨",Toast.LENGTH_SHORT).show();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -54,12 +54,12 @@ public class CallCheckReceiver extends BroadcastReceiver {
 
                 switch(state) {
                     case TelephonyManager.CALL_STATE_IDLE:
-                        Toast.makeText(context, "전화 수신상태가 아님", Toast.LENGTH_SHORT).show();
+                        ///Toast.makeText(context, "전화 수신상태가 아님", Toast.LENGTH_SHORT).show();
                         contents = "IDLE";
                         SharedPreferenceUtil.putSharedPreference(context, "Pause_INDEX", contents);
                         break;
                     case TelephonyManager.CALL_STATE_OFFHOOK:
-                        Toast.makeText(context, "전화 받음", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, "전화 받음", Toast.LENGTH_SHORT).show();
                         contents = "OFFHOOK";
                         SharedPreferenceUtil.putSharedPreference(context, "Pause_INDEX", contents);
                         Log.d("HIHIHIHIHIHIHI", "onCallStateChanged: "+ SharedPreferenceUtil.getSharedPreference(context, "Pause_INDEX"));
