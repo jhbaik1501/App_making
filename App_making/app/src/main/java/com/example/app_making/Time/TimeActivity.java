@@ -115,7 +115,8 @@ public class TimeActivity extends FragmentActivity {
         group1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int groupid = Integer.parseInt(group1.getText().toString().replaceAll("[^0-9]", ""));
+
+//                int groupid = Integer.parseInt(group1.getText().toString().replaceAll("[^0-9]", ""));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(TimeActivity.this);
                 builder.setTitle("그룹에 참여 혹은 만들기");
@@ -528,15 +529,16 @@ public class TimeActivity extends FragmentActivity {
 
 
                         String[] split = response.split(",");
+                        if(split.length != 1){
+                            for(int i=0; i<split.length; i+= 3){
+                                String s1 = split[i];
+                                String s2 = split[i + 1];
+                                String s3 = split[i + 2];
 
-                        for(int i=0; i<split.length; i+= 3){
-                            String s1 = split[i];
-                            String s2 = split[i + 1];
-                            String s3 = split[i + 2];
-
-                            s1 = s1.replaceAll("[^0-9]", "");
-                            if(i == 0)
-                                group1.setText("그룹 : " + s1);
+                                s1 = s1.replaceAll("[^0-9]", "");
+                                if(i == 0)
+                                    group1.setText("그룹 : " + s1);
+                            }
                         }
 
                     }
@@ -747,7 +749,7 @@ public class TimeActivity extends FragmentActivity {
 
                         if(fail.equals("success")){
                             Toast.makeText(getApplicationContext(), "그룹 참여 완료 : " + fail, Toast.LENGTH_LONG).show();
-                            group1.setText("그룹 : " + user_id);
+                            group1.setText("그룹 : " + groupId);
                         }
                         else{
                             Toast.makeText(getApplicationContext(), "등록 실패. 오류 : " + fail, Toast.LENGTH_LONG).show();
@@ -850,7 +852,7 @@ public class TimeActivity extends FragmentActivity {
                         }
 
                         Toast.makeText(getApplicationContext(), "아이디는 " + id + "\n 패스워드는" + password, Toast.LENGTH_LONG).show();
-
+                        group1.setText("그룹 : " + id);
                     }
                 },
                 //TODO 데이터 전송 요청 에러 발생

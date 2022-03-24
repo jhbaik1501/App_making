@@ -544,8 +544,15 @@ public class StudyActivity extends Activity {
                         String str = "";
 
                         try {
+
                             JSONObject jsonObject = new JSONObject(response);
-                            str = (String) jsonObject.get("time");
+                            Log.d(" json pro ->", jsonObject.get("time").toString() );
+                            if ( !jsonObject.get("time").toString().equals("null") ) {
+                                str = (String) jsonObject.get("time");
+                            } else{
+                                str = "00:00:00";
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

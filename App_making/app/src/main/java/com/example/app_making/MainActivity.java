@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -454,13 +455,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restart(Context context) {
-//        PackageManager packageManager = context.getPackageManager();
-//        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
-//        ComponentName componentName = intent.getComponent();
-//        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-//        context.startActivity(mainIntent);
-//        Runtime.getRuntime().exit(0);
-//        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        context.startActivity(mainIntent);
+        Runtime.getRuntime().exit(0);
+        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
     }
 
 
