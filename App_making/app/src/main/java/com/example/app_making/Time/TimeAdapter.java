@@ -1,4 +1,4 @@
-package com.example.app_making;
+package com.example.app_making.Time;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,26 +9,31 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.app_making.Customer;
+import com.example.app_making.OnCustomerItemClickListener;
+import com.example.app_making.R;
+
 import java.util.ArrayList;
 
-public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHolder>
-                            implements OnCustomerItemClickListener {
-    ArrayList<Customer> items = new ArrayList<Customer>();
+public class TimeAdapter extends RecyclerView.Adapter<TimeAdapter.ViewHolder>
+                            implements OnTimeItemClickListener {
 
-    OnCustomerItemClickListener listener;
+    ArrayList<Time> items = new ArrayList<Time>();
+
+    OnTimeItemClickListener listener;
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        View itemView = inflater.inflate(R.layout.customer_item, viewGroup, false);
+        View itemView = inflater.inflate(R.layout.time_item, viewGroup, false);
 
         return new ViewHolder(itemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-       Customer item = items.get(position);
+        Time item = items.get(position);
         viewHolder.setItem(item);
     }
 
@@ -37,23 +42,23 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
         return items.size();
     }
 
-    public void addItem(Customer item) {
+    public void addItem(Time item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<Customer> items) {
+    public void setItems(ArrayList<Time> items) {
         this.items = items;
     }
 
-    public Customer getItem(int position) {
+    public Time getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, Customer item) {
+    public void setItem(int position, Time item) {
         items.set(position, item);
     }
 
-    public void setOnItemClickListener(OnCustomerItemClickListener listener) {
+    public void setOnItemClickListener(OnTimeItemClickListener listener) {
         this.listener = listener;
     }
 
@@ -69,15 +74,15 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
 
         TextView textView3;
         TextView textView4;
-        ImageView imageView;
+        TextView textView;
 
-        public ViewHolder(View itemView, final OnCustomerItemClickListener listener) {
+        public ViewHolder(View itemView, final OnTimeItemClickListener listener) {
             super(itemView);
 
 
             textView3 = itemView.findViewById(R.id.textView_Name);
             textView4 = itemView.findViewById(R.id.textView_Time);
-            imageView = itemView.findViewById(R.id.imageView);
+            textView = itemView.findViewById(R.id.textView_Rank);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -91,11 +96,11 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.ViewHo
             });
         }
 
-        public void setItem(Customer item) {
+        public void setItem(Time item) {
 
-            textView3.setText(item.getMobile());
-            textView4.setText(item.getMsg());
-            imageView.setImageResource(item.getResId());
+            textView3.setText(item.getName());
+            textView4.setText(item.getTime());
+            textView.setText( String.valueOf( item.getResId() ) );
         }
 
     }

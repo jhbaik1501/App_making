@@ -64,7 +64,7 @@
         <activity android:name=".SMSActivity" android:label="SMS 액티비디" />
         <activity android:name=".StudyActivity" android:label="Study 액티비디" />
         <activity android:name=".BackgroundActivity" android:label="Study 액티비디" />
-        <activity android:name=".GameActivity" android:label="Memo 액티비디" />
+        <activity android:name=".Time.TimeActivity" android:label="Memo 액티비디" />
     </application>
 
 </manifest>

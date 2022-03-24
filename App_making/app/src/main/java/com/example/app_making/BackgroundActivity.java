@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,7 +47,7 @@ public class BackgroundActivity extends Activity {
         setContentView(R.layout.activity_background);
 
         textView = findViewById(R.id.coin_textView);
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.RecyclerView);
 
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -274,8 +273,6 @@ public class BackgroundActivity extends Activity {
         Log.d(" RequestBody ", requestBody);
         request.setShouldCache(false);
         queue.add(request);
-
-
 
     }
 
