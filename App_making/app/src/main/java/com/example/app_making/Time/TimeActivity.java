@@ -206,13 +206,23 @@ public class TimeActivity extends FragmentActivity {
                 }
                 else{
 
-                    adapter.notifyAll();
-
+                    adapter.items.clear();
+                    adapter.notifyDataSetChanged();
+                    GET_GROUPTIME("http://10.0.2.2:8080/api/UserGroupTime", Integer.parseInt(groupId));
 
                 }
             }
         });
 
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.items.clear();
+                adapter.notifyDataSetChanged();
+                GET("http://10.0.2.2:8080/api/TimeList");
+            }
+        });
     }
 
     public void AdapterAdd(String name, String time, int id){
@@ -237,6 +247,121 @@ public class TimeActivity extends FragmentActivity {
         Runtime.getRuntime().exit(0);
         Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
     }
+
+    public void GET_GROUPTIME(final String url, int groupId){
+        // 만약 id가 존재한다면 그냥 있고 , 그렇지 않다면 id 값을 만들어준다.
+        //TODO 데이터 Request 객체 생성
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        //TODO 파라미터값 선언 실시
+        Map<String, String> params = new HashMap<>(); //TODO {userId=1} 형태
+
+        params.put("id", String.valueOf(groupId));
+//        params.put("userId", String.valueOf(id));
+
+        //TODO 전송 Url 및 Data 파싱 실시
+        String dataParse = "";
+        String getUrl = "";
+        dataParse = String.valueOf(params.toString());
+        dataParse = dataParse.replaceAll("[{]","");
+        dataParse = dataParse.replaceAll("[}]","");
+        dataParse = dataParse.replaceAll("[,]","&");
+        getUrl = url + "?" + dataParse;
+        getUrl = getUrl.replaceAll(" ","");
+        Log.d("---","---");
+        Log.w("//===========//","================================================");
+        Log.d("","\n"+"[A_Main > getRequestVolleyGET() 메소드 : Volley GET 요청 실시]");
+        Log.d("","\n"+"["+"요청 주소 - "+String.valueOf(url)+"]");
+        Log.d("","\n"+"["+"전송 값 - "+String.valueOf(params)+"]");
+        Log.d("","\n"+"["+"전송 형태 - "+String.valueOf(getUrl)+"]");
+        Log.w("//===========//","================================================");
+        Log.d("---","---");
+
+        //TODO 데이터 Response 객체 생성
+
+
+        final String requestBody = "";
+
+        StringRequest request = new StringRequest(Request.Method.GET, getUrl,
+                //TODO 데이터 전송 요청 성공
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("---","---");
+                        Log.w("//===========//","================================================");
+                        Log.d("","\n"+"[A_Main > getRequestVolleyGET() 메소드 : Volley GET 요청 응답]");
+                        Log.d("","\n"+"["+"응답 전체 - "+String.valueOf(response.toString())+"]");
+                        Log.w("//===========//","================================================");
+                        Log.d("---","---");
+
+
+                        recyclerView.setAdapter(adapter);
+//                        editText.setText(response);
+
+                        String[] split = response.split(",");
+
+                        for(int i=0; i<split.length; i+= 2){
+                            String s1 = split[i];
+                            String s2 = split[i + 1];
+
+                            s1= s1.replace("[", "");
+                            s1= s1.replace("\"", "");
+                            s1= s1.replace("]", "");
+
+                            s2= s2.replace("[", "");
+                            s2= s2.replace("\"", "");
+                            s2= s2.replace("]", "");
+
+                            AdapterAdd(s1, s2, i/2 + 1);
+                        }
+
+
+
+                        recyclerView.setAdapter(adapter);
+                    }
+                },
+                //TODO 데이터 전송 요청 에러 발생
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("---","---");
+                        Log.e("//===========//","================================================");
+                        Log.d("","\n"+"[A_Main > getRequestVolleyGET() 메소드 : Volley GET 요청 실패]");
+                        Log.d("","\n"+"["+"에러 코드 - "+String.valueOf(error.toString())+"]");
+                        Log.e("//===========//","================================================");
+                        Log.d("---","---");
+
+
+
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody() {
+                try {
+                    if (requestBody != null && requestBody.length() > 0 && !requestBody.equals("")) {
+                        return requestBody.getBytes("utf-8");
+                    } else {
+                        return null;
+                    }
+                } catch (UnsupportedEncodingException uee) {
+                    return null;
+                }
+            }
+        };
+
+        Log.d(" RequestBody ", requestBody);
+        request.setShouldCache(false);
+        queue.add(request);
+
+    }
+
 
     public void GET(final String url){
         // 만약 id가 존재한다면 그냥 있고 , 그렇지 않다면 id 값을 만들어준다.
@@ -351,8 +476,6 @@ public class TimeActivity extends FragmentActivity {
         queue.add(request);
 
     }
-
-
 
 
 
