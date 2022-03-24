@@ -32,19 +32,45 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.LinearLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 import java.util.Timer;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -77,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         mReceiver = new TimeReset();
 
 
-
         /*Intent intent = new Intent(this, MainActivity.class);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -90,9 +115,39 @@ public class MainActivity extends AppCompatActivity {
         requirePerms3();
         requirePerms4();
 
+        String filename = "id.txt";
+        FileInputStream infs;
+        try {
+            infs= openFileInput(filename);
+            byte txt[]=new byte[500];
+            infs.read(txt);
+            infs.close();
+            String rep = (new String(txt)).trim() ;
+            Log.d("* : ", rep);
+            GET("http://10.0.2.2:8080/api/UserCheck", Integer.parseInt( rep )  );
+        } catch (FileNotFoundException e) {
+            Log.d("","\n"+"[처음 들어왔으므로 ,id 처음으로 생성.]");
+            EditText et1 = new EditText(getApplicationContext());
+            et1.setHint("이름");
+
+            AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(MainActivity.this);
+            myAlertBuilder.setTitle("본인의 이름을 적어주세요!")
+                    .setView(et1)
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            POST_BODY_JSON("http://10.0.2.2:8080/api/createAccount", getApplicationContext(), et1.getText().toString() );
+                        }
+                    });
+            AlertDialog alert = myAlertBuilder.create();
+            alert.show();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         textClock.setTextSize(30);
-
-
 
     }
 
@@ -424,13 +479,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void restart(Context context) {
-        PackageManager packageManager = context.getPackageManager();
-        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
-        ComponentName componentName = intent.getComponent();
-        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-        context.startActivity(mainIntent);
-        Runtime.getRuntime().exit(0);
-        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
+//        PackageManager packageManager = context.getPackageManager();
+//        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+//        ComponentName componentName = intent.getComponent();
+//        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+//        context.startActivity(mainIntent);
+//        Runtime.getRuntime().exit(0);
+//        Log.d("RSTART", "============\n\nonKeyDown: HOME \n\n=================");
     }
 
 
@@ -484,5 +539,211 @@ public class MainActivity extends AppCompatActivity {
             main_linearLayout.setBackground(ContextCompat.getDrawable(this, R.drawable.picture7));
         }
     }
+
+
+
+
+    public void GET(final String url, int id){
+        // 만약 id가 존재한다면 그냥 있고 , 그렇지 않다면 id 값을 만들어준다.
+        //TODO 데이터 Request 객체 생성
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        //TODO 파라미터값 선언 실시
+        Map<String, String> params = new HashMap<>(); //TODO {userId=1} 형태
+
+//        params.put("userId", "1");
+        params.put("userId", String.valueOf(id));
+
+        //TODO 전송 Url 및 Data 파싱 실시
+        String dataParse = "";
+        String getUrl = "";
+        dataParse = String.valueOf(params.toString());
+        dataParse = dataParse.replaceAll("[{]","");
+        dataParse = dataParse.replaceAll("[}]","");
+        dataParse = dataParse.replaceAll("[,]","&");
+        getUrl = url + "?" + dataParse;
+        getUrl = getUrl.replaceAll(" ","");
+        Log.d("---","---");
+        Log.w("//===========//","================================================");
+        Log.d("","\n"+"[A_Main > getRequestVolleyGET() 메소드 : Volley GET 요청 실시]");
+        Log.d("","\n"+"["+"요청 주소 - "+String.valueOf(url)+"]");
+        Log.d("","\n"+"["+"전송 값 - "+String.valueOf(params)+"]");
+        Log.d("","\n"+"["+"전송 형태 - "+String.valueOf(getUrl)+"]");
+        Log.w("//===========//","================================================");
+        Log.d("---","---");
+
+        //TODO 데이터 Response 객체 생성
+
+
+        final String requestBody = "";
+
+        StringRequest request = new StringRequest(Request.Method.GET, getUrl,
+                //TODO 데이터 전송 요청 성공
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("---","---");
+                        Log.w("//===========//","================================================");
+                        Log.d("","\n"+"[A_Main > getRequestVolleyGET() 메소드 : Volley GET 요청 응답]");
+                        Log.d("","\n"+"["+"응답 전체 - "+String.valueOf(response.toString())+"]");
+                        Log.w("//===========//","================================================");
+                        Log.d("---","---");
+
+
+
+
+                    }
+                },
+                //TODO 데이터 전송 요청 에러 발생
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("---","---");
+                        Log.e("//===========//","================================================");
+                        Log.d("","\n"+"[A_Main > getRequestVolleyGET() 메소드 : Volley GET 요청 실패]");
+                        Log.d("","\n"+"["+"에러 코드 - "+String.valueOf(error.toString())+"]");
+                        Log.e("//===========//","================================================");
+                        Log.d("---","---");
+
+
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+
+            @Override
+            public byte[] getBody() {
+                try {
+                    if (requestBody != null && requestBody.length() > 0 && !requestBody.equals("")) {
+                        return requestBody.getBytes("utf-8");
+                    } else {
+                        return null;
+                    }
+                } catch (UnsupportedEncodingException uee) {
+                    return null;
+                }
+            }
+        };
+
+        Log.d(" RequestBody ", requestBody);
+        request.setShouldCache(false);
+        queue.add(request);
+
+
+
+    }
+
+
+
+    public void POST_BODY_JSON(final String url, Context context, String name){
+        //TODO 데이터 Request 객체 생성
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        //TODO 파라미터값 선언 실시
+        JSONObject jsonBodyObj = new JSONObject();
+        try{
+            //" { \"age\" : 24, \"coin\" : 3, \"name\" : \"jisoo\"} ");
+            jsonBodyObj.put("age", 20);
+            jsonBodyObj.put("coin",30);
+            jsonBodyObj.put("name",name);
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        final String requestBody = String.valueOf(jsonBodyObj.toString());
+
+        Log.d("---","---");
+        Log.w("//===========//","================================================");
+        Log.d("","\n"+"[A_Main > getRequestVolleyPOST_BODY_JSON() 메소드 : Volley POST_BODY_JSON 요청 실시]");
+        Log.d("","\n"+"["+"요청 주소 - "+String.valueOf(url)+"]");
+        Log.d("","\n"+"["+"전송 값 - "+String.valueOf(jsonBodyObj.toString())+"]");
+        Log.d("","\n"+"["+"전송 타입 - "+String.valueOf("application/json")+"]");
+        Log.w("//===========//","================================================");
+        Log.d("---","---");
+
+        //TODO 데이터 Response 객체 생성
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null,
+                //TODO 데이터 전송 요청 성공
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        String str = "";
+
+                        Log.d("---","---");
+                        Log.w("//===========//","================================================");
+                        Log.d("","\n"+"[A_Main > getRequestVolleyPOST_BODY_JSON() 메소드 : Volley POST_BODY_JSON 요청 응답]");
+                        Log.d("","\n"+"["+"응답 전체 - "+String.valueOf(response.toString())+"]");
+                        Log.w("//===========//","================================================");
+                        Log.d("---","---");
+
+                        try {
+                            str = String.valueOf(response.get("id"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        String filename = "id.txt";
+
+                        Log.d("=====", "\n\n\n========="+filename);
+                        FileOutputStream outfs = null;
+                        try {
+                            outfs = openFileOutput(filename, Context.MODE_PRIVATE);
+                            outfs.write(str.getBytes());
+                            outfs.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                //TODO 데이터 전송 요청 에러 발생
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("---","---");
+                        Log.e("//===========//","================================================");
+                        Log.d("","\n"+"[A_Main > getRequestVolleyPOST_BODY_JSON() 메소드 : Volley POST_BODY_JSON 요청 실패]");
+                        Log.d("","\n"+"["+"에러 코드 - "+String.valueOf(error.toString())+"]");
+                        Log.e("//===========//","================================================");
+                        Log.d("---","---");
+                    }
+                })
+                //TODO 헤더값 선언 실시 및 Body 데이터 바이트 변환 실시
+        {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+            @Override
+            public byte[] getBody() {
+                try {
+                    if (requestBody != null && requestBody.length()>0 && !requestBody.equals("")){
+                        return requestBody.getBytes("utf-8");
+                    }
+                    else {
+                        return null;
+                    }
+                } catch (UnsupportedEncodingException uee) {
+                    return null;
+                }
+            }
+        };
+
+        request.setShouldCache(false);
+        queue.add(request);
+    }
+
+
+
 }
 
